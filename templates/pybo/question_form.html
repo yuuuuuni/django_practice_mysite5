@@ -6,15 +6,16 @@
     <form method="post" class="post-form my-3"> <!-- form 태그에 action 속성이 지정되지 않으면 현재 페이지가 디폴트 action으로 설정됨 -->
         {% csrf_token %}
          <!-- {{ form.as_p }}는 QuestionForm 양식을 불러옴, html 코드도 자동으로 생성함 그러므로 주석처리-->
+        <!-- {{ form.as_p }}를 이용하여 html을 자동 생성하지 말고 직접 아래와 같이 html 코드를 쳐보기. 그래서 {{ form.as_p }} 지움 -->
         <!-- 오류표시 Start -->
         {% if form.errors %}
             <div class="alert alert-warning" role="alert">
-                {% for field in form %}
-                    {% if field.errors %}
-                    <strong>{{ field.label }}</strong>
-                    {{ field.errors }}
-                    {% endif %}
-                {% endfor %}
+            {% for field in form %}
+                {% if field.errors %}
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+                {% endif %}
+            {% endfor %}
             </div>
         {% endif %}
         <!-- 오류표시 End -->

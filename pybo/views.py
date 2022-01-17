@@ -54,7 +54,7 @@ def question_create(request):
         if form.is_valid():  # QuestionForm이 형식에 맞게 제대로 되어 있다면
             question = form.save(commit=False)  # form을 임시저장해서 question이라는 변수에 넣어라
             question.create_date = timezone.now()  # 그 변수의 작성일시를 현재로 해라
-            question.save()  # 저장해라
+            question.save()  # 진짜 저장해라
             return redirect('pybo:index')
     else:  # 방식이 post가 아니면? get이겠지?
         form = QuestionForm()  # 데이터가 없는 빈 폼

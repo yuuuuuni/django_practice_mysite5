@@ -10,14 +10,14 @@ def index(request):
     pybo 질문 목록
     """
     # 입력 파라미터
-    page = request.GET.get('page', '1') # 페이지
+    page = request.GET.get('page', '1') # url의 query string에서 page에 해당하는 값 가져옴. page 값이 존재하지 않으면 1로 셋팅
 
     # 조회
     question_list = Question.objects.order_by('-create_date') # question_list는 게시물 전체를 의미함
 
     # 페이징처리
-    paginator = Paginator(question_list, 10) # 페이지당 10개씩 보여주기
-    page_obj = paginator.get_page(page)
+    paginator = Paginator(question_list, 10) # 페이지당 10개씩 보여 주기
+    page_obj = paginator.get_page(page) #  paginator를 이용하여 요청된 페이지(page)에 해당되는 페이징 객체(page_obj)를 생성
 
     context = {'question_list': page_obj}  # 여기에서 부르는 키는 html에서 쓸 키, 값은 여기의 값
     return render(request, 'pybo/question_list.html', context)

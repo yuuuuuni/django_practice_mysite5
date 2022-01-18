@@ -1,9 +1,6 @@
-from django.http import HttpResponse
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-
-# Create your views here.
 from django.utils import timezone
-
 from .forms import QuestionForm, AnswerForm
 from .models import Question
 
@@ -12,8 +9,17 @@ def index(request):
     """
     pybo 질문 목록
     """
-    question_list = Question.objects.order_by('-create_date')
-    context = {'question_list': question_list}  # 여기에서 부르는 키는 html에서 쓸 키, 값은 여기의 값
+    # 입력 파라미터
+    page = request.GET.get('page', '1') # 페이지
+
+    # 조회
+    question_list = Question.objects.order_by('-create_date') # question_list는 게시물 전체를 의미함
+
+    # 페이징처리
+    paginator = Paginator(question_list, 10) # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
+
+    context = {'question_list': page_obj}  # 여기에서 부르는 키는 html에서 쓸 키, 값은 여기의 값
     return render(request, 'pybo/question_list.html', context)
 
 

@@ -9,17 +9,19 @@ def index(request):
     """
     pybo 질문 목록
     """
-    # 입력 파라미터
-    page = request.GET.get('page', '1') # 내가 요청한 페이지 번호가 page에 들어감. page?=4 이런식의 페이지 값이 없으면 그냥 1로 셋팅
+    # 입력 파라미터(사용자가 요청한 페이지의 번호가 변수 page에 들어간다고 보면 됨)
+    page = request.GET.get('page', '1') # 내가 요청한 페이지 번호가 4라면 '?page=4' 이런식으로 page에 4가 들어간다는 의미. page?=4 이런식의 페이지 값이 없으면 그냥 1로 셋팅
 
     # 조회
     question_list = Question.objects.order_by('-create_date') # question_list는 게시물 전체를 의미함
 
     # 페이징처리
     paginator = Paginator(question_list, 10) # 페이지당 10개씩 보여 주기
-    page_obj = paginator.get_page(page) #  paginator를 이용하여 요청된 페이지(page)에 해당되는 페이징 객체(page_obj)를 생성
+    page_obj = paginator.get_page(page) # paginator에서 사용자가 클릭한 페이지 쪽수의(그래서 괄호안에 page가 있는것) 페이지를 꺼내 page_obj 객체를 생성.
+    # 만약, 사용자가 페이지 5를 클릭하면 page에 5가 들어가고 paginator의 페이지 쪽수가 5인 것을 꺼내 page_obj 객체를 생성해라.
 
-    context = {'question_list': page_obj}  # 여기에서 부르는 키는 html에서 쓸 키, 값은 여기의 값
+    context = {'question_list': page_obj}  # 여기에서 부르는 키는 html에서 쓸 키, 값은 여기의 값.
+    # 그 다음, html에서 가리키는 question_list라는 키의 값을 page_obj로 해라
     return render(request, 'pybo/question_list.html', context)
 
 

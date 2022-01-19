@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load pybo_filter %}
 {% block content %}
+<div>
+    <img src="img/movie_img.png" class="img-fluid" alt="movie img">
+</div>
 <div class="container my-3">
     <table class="table table-striped">
         <thead>
@@ -34,22 +37,23 @@
         {% endif %}
         </tbody>
     </table>
+
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
         {% if question_list.has_previous %} <!-- 이전 페이지가 있는지 체크, 이전 페이지가 있다면 -->
         <li class="page-item">
-            <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a> <!-- 이전 페이지 번호로 이동해라 -->
+            <a class="page-link" href="?page={{ question_list.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a> <!-- 이전 페이지 번호로 이동해라 -->
         </li>
         {% else %} <!-- 없다면 -->
-        <li class="page-item disabled">
+        <li class="page-item disabled"> <!-- disabled는 비활성화 라는 뜻 -->
             <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a> <!-- '이전' 링크를 비활성화 시켜라. aria-disabled="true"라는 뜻은 비활성화 라는 뜻 -->
         </li>
         {% endif %}
         <!-- 페이지리스트 -->
-        {% for page_number in question_list.paginator.page_range %} <!-- 페이지 리스트를 루프 도는 것 -->
+        {% for page_number in question_list.paginator.page_range %} <!-- 페이지 리스트 루프를 돌음 -->
         {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %} <!-- 페이지의 범위를 표시한 것. 현재 페이지에서 -5인 페이지부터 +5인 페이지까지 보여줘라 -->
-            {% if page_number == question_list.number %} <!-- 현재 페이지와 같은지 체크, page_number는 보여줄(내가 클릭할) 페이지 넘버. question_list.number는 현재 페이지 넘버임 -->
+            {% if page_number == question_list.number %} <!-- 현재 페이지와 사용자가 클릭한 페이지가 같은지 체크, page_number는 내가 클릭한 페이지 넘버. question_list.number는 현재 페이지 넘버임 -->
             <li class="page-item active" aria-current="page"> <!-- 현재 페이지와 같을 경우 active클래스를 적용하여 강조표시 함 -->
                 <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <!-- 현재 페이지와 같으므로 넘버 강조표시 -->
             </li>
@@ -63,7 +67,7 @@
         <!-- 다음페이지 -->
         {% if question_list.has_next %} <!-- 다음 페이지가 있는지 체크, 다음 페이지가 있다면 -->
         <li class="page-item">
-            <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a> <!-- 다음 페이지 번호로 이동해라 -->
+            <a class="page-link" href="?page={{ question_list.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a> <!-- 다음 페이지 번호로 이동해라 -->
         </li>
         {% else %} <!-- 없다면 -->
         <li class="page-item disabled">
@@ -72,6 +76,7 @@
         {% endif %}
     </ul>
     <!-- 페이징처리 끝 -->
+
     <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문등록</a>
 </div>
 {% endblock %}

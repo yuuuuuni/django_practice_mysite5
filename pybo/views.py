@@ -10,7 +10,7 @@ def index(request):
     pybo 질문 목록
     """
     # 입력 파라미터
-    page = request.GET.get('page', '1') # url의 query string에서 page에 해당하는 값 가져옴. page 값이 존재하지 않으면 1로 셋팅
+    page = request.GET.get('page', '1') # 내가 요청한 페이지 번호가 page에 들어감. page?=4 이런식의 페이지 값이 없으면 그냥 1로 셋팅
 
     # 조회
     question_list = Question.objects.order_by('-create_date') # question_list는 게시물 전체를 의미함

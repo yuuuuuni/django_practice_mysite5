@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load pybo_filter %}
 {% block content %}
 <div class="container my-3">
     <table class="table table-striped">
@@ -13,8 +14,16 @@
         {% if question_list %}
         {% for question in question_list %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a></td>
+            <td>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
+            </td>
+            <td>
+                <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                {% if question.answer_set.count > 0 %}
+                <span class="text-danger small ml-2">{{ question.answer_set.count }}</span>
+                {% endif %}
+            </td>
             <td>{{ question.create_date }}</td>
         </tr>
         {% endfor %}
@@ -39,14 +48,14 @@
         {% endif %}
         <!-- 페이지리스트 -->
         {% for page_number in question_list.paginator.page_range %} <!-- 페이지 리스트를 루프 도는 것 -->
-        {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
-            {% if page_number == question_list.number %} <!-- 현재 페이지와 같은지 체크, question_list.number는 현재 페이지 넘버임 -->
+        {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %} <!-- 페이지의 범위를 표시한 것. 현재 페이지에서 -5인 페이지부터 +5인 페이지까지 보여줘라 -->
+            {% if page_number == question_list.number %} <!-- 현재 페이지와 같은지 체크, page_number는 보여줄(내가 클릭할) 페이지 넘버. question_list.number는 현재 페이지 넘버임 -->
             <li class="page-item active" aria-current="page"> <!-- 현재 페이지와 같을 경우 active클래스를 적용하여 강조표시 함 -->
-                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <!-- 페이지 넘버 클릭하면 그 해당 페이지 넘버로 감 + 현재 페이지와 같으므로 넘버 강조표시 -->
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <!-- 현재 페이지와 같으므로 넘버 강조표시 -->
             </li>
             {% else %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>  <!-- 페이지 넘버 클릭하면 그 해당 페이지 넘버로 감 -->
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
             </li>
             {% endif %}
         {% endif %}

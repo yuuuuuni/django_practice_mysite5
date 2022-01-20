@@ -1,0 +1,16 @@
+<!-- form.errors.html 템플릿은 필드 오류와 넌필드 오류 모두를 표시하기 위해 삽입되는 템플릿 -->
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %} <!-- 필드 오류를 출력한다.(사용자가 입력한 필드 값에 대한 오류-값이 누락되었거나 필드의 형식이 일치하지 않으면 발생함 -->
+            <div class="alert alert-danger"> <!-- 빨간색 폰트의 에러 메시지 뜨는 그 부트스트랩 속성임 -->
+                <strong>{{ field.label }}</strong>
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %} <!-- 넌필드 오류를 출력한다. (필드의 값과는 상관없이 다른 이유로 발생하는 오류) -->
+        <div class="alert alert-danger">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
